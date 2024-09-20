@@ -31,7 +31,7 @@ class Crawler:
                     validExtension = False
                     break
 
-            # might be overkill, but checks the type through the file header in case something made it through
+            # might be overkill, but checks the type through the header in case something made it through
 
             if(validExtension):
                 fileType = requests.head(url)
