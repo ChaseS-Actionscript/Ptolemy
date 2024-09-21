@@ -16,8 +16,7 @@ class Crawler:
         self.visited = set()
 
     def crawl(self):
-        #self.generate_threads(self.base_url, num_of_threads=3)
-        self._visit(self.base_url) 
+        self.generate_threads(self.base_url, num_of_threads=3)
         return self.visited
 
     def _visit(self, url):
