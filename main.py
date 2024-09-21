@@ -2,7 +2,7 @@ from crawler import Crawler
 from sitemap import Sitemap
 import sys
 def main():
-    url = input("Enter the URL of the website: ")
+    url = sys.argv[1]
     crawler = Crawler(url)
     urls = crawler.crawl()
     
