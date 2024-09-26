@@ -10,7 +10,7 @@ class Crawler:
         self.base_url = base_url
         self.visited = set()
 
-    def crawl(self):
+    def crawl(self) -> set:
         self._visit(self.base_url)
         return self.visited
 
@@ -22,9 +22,9 @@ class Crawler:
             try:
                 response = requests.get(url)
                 soup = BeautifulSoup(response.content, 'html.parser')
-                for link in soup.find_all('a', href=True): # <a> tag defines a hyperlink
+                for link in soup.find_all('a', href=True): # find all <a> tags that have an href attribute (links)
                     full_url = self._make_full_url(link['href'])
-                    if full_url.startswith(self.base_url):
+                    if full_url.startswith(self.base_url): # this is a hacky way to skip any ad links by simply preventing any links to other websites
                         self._visit(full_url)
             except Exception as e:
                 print(f"Failed to visit {url}: {e}")
@@ -32,4 +32,4 @@ class Crawler:
     def _make_full_url(self, link):
         if link.startswith('http'):
             return link
-        return f"{self.base_url}/{link.lstrip('/')}"
+        return f"{self.base_url}/{link.lstrip('/')}" # create full url by combining base url with the relative path
