@@ -1,34 +1,73 @@
 import static org.lwjgl.glfw.GLFW.*;
-
-import org.lwjgl.glfw.GLFWVidMode;
-
+import display.DisplayManager;
+import static org.lwjgl.opengl.GL11.*;
+import gameobjects.Node;
+import gameobjects.Shape;
 public class Main {
-	public static void main(String[] args) {
-		if (!glfwInit()) {
-			throw new IllegalStateException("Failed to initialize GLFW!");
-		}
-		
-		long window = glfwCreateWindow(640, 480, "Ptolemy", 0, 0);
-		if (window == 0) {
-			throw new IllegalStateException("Failed to create window!");
-		}
-		
-		GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, (videoMode.width() - 640) / 2, (videoMode.height() - 480) / 2);
-		
-		glfwShowWindow(window);
-		while (!glfwWindowShouldClose(window)) {
-           
-            glfwPollEvents();
-            
-            // Create a sweet spot between nodes to prevent cluttering
-            // Any nodes that are not connected to eachother should be at a distance away from eachother equal to (sweet spot)*1.5
-            
-            glfwSwapBuffers(window);
-        }
+    private static DisplayManager displayManager;
+    private static Node testNode;
+    public static void main(String[] args) {
+        displayManager = new DisplayManager();
+        displayManager.createDisplay(640, 480, "Ptolemy");
+        long window = displayManager.getWindow();
+        // Ensures that after resizing, any shapes on screen keep their on hover properties
+        glfwSetFramebufferSizeCallback(window, (windowHandle, width, height) -> {
+            glViewport(0, 0, width, height);
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity(); // Reload identity
+            glOrtho(0, width, 0, height, -1, 1); // Adjust orthographic projection based on new size
+            glMatrixMode(GL_MODELVIEW);
+        });
+
+        float[] vertices = new float[] {
+        	    100, 150,  // top left
+        	    200, 150,  // top right
+        	    200, 100,  // bottom right
+        	       
+        	    100, 150,  // top left
+        	    100, 100, // bottom left
+        	    200, 100,  // bottom right
+        	};
         
-        // Clean up and terminate GLFW
-        glfwDestroyWindow(window);
-        glfwTerminate();
-	}
+        Shape testShape = new Shape(vertices); // Testing VBO instead of display lists because of performance gains
+        testNode = new Node(640/2, 200, 100, 50, "Click Me");
+        // This is sort of like "When mouse button clicked"
+        glfwSetMouseButtonCallback(window, (long win, int button, int action, int mods) -> {
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+            	// Sets arrays of size 1 because GLFW requires cursor position to be passed by reference, so not just double literals
+            	// For future reference this looks like how &variable is in c++
+                double[] xpos = new double[1];
+                double[] ypos = new double[1];
+                glfwGetCursorPos(win, xpos, ypos);
+                int[] width = new int[1];
+                int[] height = new int[1];
+                glfwGetWindowSize(window, width, height);
+                
+                
+                // Adjust for OpenGL coordinates (inverted Y-axis)
+                double mouseX = xpos[0];
+                double mouseY = height[0] - ypos[0];
+
+                if (Main.testNode.isHovered(mouseX, mouseY)) {
+                    Main.testNode.onClick();
+                }
+                
+            }
+        });
+
+
+        // Main game loop
+        while (!displayManager.shouldClose()) {
+        	displayManager.clearScreen();
+            testNode.render();
+            testShape.render();
+            // Update the display
+            displayManager.updateDisplay();
+
+        }
+
+        displayManager.closeDisplay(); // Clean up
+    }
+
 }
+   
