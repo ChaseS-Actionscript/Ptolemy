@@ -4,7 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.*;
 import org.lwjgl.glfw.GLFWVidMode;
 
-public class DisplayManager {
+public class DisplayManager{
     private long window;
 
     public void createDisplay(int width, int height, String title) {
@@ -51,6 +51,13 @@ public class DisplayManager {
         glfwSwapBuffers(window);
         
         
+    }
+    
+    public int[] getDim(long window) {
+    	int[] width = new int[1];
+    	int[] height = new int[1];
+    	glfwGetWindowSize(window, width, height);
+    	return new int[] {width[0],height[0]};
     }
     
     public void clearScreen() {

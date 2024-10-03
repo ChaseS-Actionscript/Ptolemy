@@ -6,7 +6,10 @@ import org.lwjgl.BufferUtils;
 public class Shape {
 	private int draw_count;
 	private int vbo;
+	private float[] vertices;
 	public Shape (float[] vertices) {
+		// TODO: account for the fact that after 2 values, the next 3 values are color
+		this.vertices = vertices;
 		draw_count = vertices.length / 2;
 		
 		
@@ -33,4 +36,15 @@ public class Shape {
 		
 		
 	}
+	
+    public boolean isHovered(double mouseX, double mouseY) {
+        // Check if the mouse is within the button's bounds
+        return mouseX >= vertices[0] && mouseX <= vertices[2] && mouseY >= vertices[5] && mouseY <= vertices[1];
+        // Checks if mouse position is in the range of x and y values the rectangle covers
+    }
+    
+    public void onClick() {
+        // Perform the button's action when clicked
+        System.out.println("Button '" + "' clicked!");
+    }
 }
