@@ -1,7 +1,9 @@
 package display;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL33.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.*;
+
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 
 public class DisplayManager{
@@ -16,7 +18,9 @@ public class DisplayManager{
         if (window == 0) {
             throw new IllegalStateException("Failed to create window!");
         }
-
+        
+        GLFW.glfwWindowHint(GL_MAJOR_VERSION, 3); GLFW.glfwWindowHint(GL_MINOR_VERSION, 3);
+        GLFW.glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         // Center window
         GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);

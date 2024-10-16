@@ -1,5 +1,5 @@
 package gameobjects;
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL33.*;
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 
@@ -21,6 +21,7 @@ public class Shape {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
 	}
 
 	public void render() {
