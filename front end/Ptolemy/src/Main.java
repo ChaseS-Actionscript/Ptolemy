@@ -20,13 +20,13 @@ public class Main {
         });
 
         float[] vertices = new float[] {
-        	    100, 150,  // top left
-        	    200, 150,  // top right
-        	    200, 100,  // bottom right
+        	    100, 150, 1f, 0f, 0f, // top left
+        	    200, 150, 0f, 1f, 0f, // top right
+        	    200, 100, 0f, 0f, 1f, // bottom right
         	       
-        	    100, 150,  // top left
-        	    100, 100, // bottom left
-        	    200, 100,  // bottom right
+        	    100, 150, 0f, 1f, 0f, // top left
+        	    100, 100, 0f, 1f, 1f, // bottom left
+        	    200, 100, 0f, 0f, 1f // bottom right
         	};
         testShape = new Shape(vertices); // Testing VBO instead of display lists because of performance gains
         //testNode = new Node(640/2, 200, 100, 50, "Click Me");

@@ -20,11 +20,11 @@ public class DisplayManager{
         }
         
         GLFW.glfwWindowHint(GL_MAJOR_VERSION, 3); GLFW.glfwWindowHint(GL_MINOR_VERSION, 3);
-        GLFW.glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        GLFW.glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // Set to OpenGL Programmable Pipeline
         // Center window
         GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
-
+        
         glfwShowWindow(window);
         glfwMakeContextCurrent(window);
         createCapabilities(); // Initialize OpenGL
@@ -38,7 +38,7 @@ public class DisplayManager{
         glMatrixMode(GL_MODELVIEW); // Prepare for object transformations
         glLoadIdentity(); // Reset any previous transforms
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Background color
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Background color
     }
 
     

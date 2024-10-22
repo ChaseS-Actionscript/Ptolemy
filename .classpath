@@ -48,7 +48,7 @@
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-openal.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-openal-natives-windows.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-opencl.jar"/>
-	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-opengl.jar"/>
+	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-opengl.jar" sourcepath="front end/Ptolemy/sources/lwjgl-opengl-sources.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-opengles.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-opengles-natives-windows.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-opengl-natives-windows.jar"/>
