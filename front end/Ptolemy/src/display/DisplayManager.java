@@ -31,12 +31,7 @@ public class DisplayManager{
 
         // Set up OpenGL projection
         glViewport(0, 0, width, height);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0, width, 0, height, -1, 1); // Orthographic for 2D rendering (y goes bottom-up)
-        
-        glMatrixMode(GL_MODELVIEW); // Prepare for object transformations
-        glLoadIdentity(); // Reset any previous transforms
+        glfwSwapInterval(0);
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Background color
     }

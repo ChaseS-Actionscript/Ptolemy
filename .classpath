@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="front end/Ptolemy/src"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-assimp.jar"/>
@@ -12,7 +16,7 @@
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-fmod.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-freetype.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-freetype-natives-windows.jar"/>
-	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-glfw.jar"/>
+	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-glfw.jar" sourcepath="front end/Ptolemy/sources/lwjgl-glfw-sources.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-glfw-natives-windows.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-harfbuzz.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/library/lwjgl-harfbuzz-natives-windows.jar"/>
@@ -105,5 +109,6 @@
 	<classpathentry kind="lib" path="front end/Ptolemy/used-jars/lwjgl-opengl.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/used-jars/lwjgl-stb.jar"/>
 	<classpathentry kind="lib" path="front end/Ptolemy/used-jars/lwjgl-vulkan.jar"/>
+	<classpathentry kind="lib" path="front end/Ptolemy/library/joml-1.10.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
