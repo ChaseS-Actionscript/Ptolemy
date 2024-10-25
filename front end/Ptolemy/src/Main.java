@@ -5,31 +5,22 @@ import gameobjects.Shape;
 import shaders.ShaderManager;
 import java.io.IOException;
 import org.joml.Matrix4f;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Random;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.File;
 public class Main {
-	private static boolean isShapeVisible(Shape shape, float cameraX, float cameraY, float left, float right, float bottom, float top) {
-	    float shapeX = shape.getPositionX();
-	    float shapeY = shape.getPositionY();
-
-	    // Check if any vertex is within the camera view
-	    float[] vertices = shape.getVertices();
-	    for (int i = 0; i < vertices.length; i += 5) { // Step by 5 for each vertex (2 for position, 3 for color)
-	        float x = vertices[i] + shapeX;  // Adjust for shape's position
-	        float y = vertices[i + 1] + shapeY;  // Adjust for shape's position
-
-	        if (x + cameraX >= left && x + cameraX <= right && y + cameraY >= bottom && y + cameraY <= top) {
-	            return true; // At least one vertex is visible
-	        }
-	    }
-	    return false; // No vertices are visible
-	}
     private static DisplayManager displayManager;
-    private static Shape testShape;
+
     private static ShaderManager shaderManager;
-    private static Shape testShape2;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         displayManager = new DisplayManager();
         displayManager.createDisplay(640, 480, "Ptolemy");
         long window = displayManager.getWindow();
+        int windowWidth = displayManager.getDim(window)[0];
+        int windowHeight = displayManager.getDim(window)[1];
         // Load and compile shaders
         try {
             shaderManager = new ShaderManager(System.getProperty("user.dir")+"/front end/Ptolemy/src/shaders/vertexShader.vert", System.getProperty("user.dir")+"/front end/Ptolemy/src/shaders/fragmentShader.frag");
@@ -37,33 +28,30 @@ public class Main {
             e.printStackTrace();
             System.exit(-1);
         }
-
+        
         // Set up callback for resizing window
         glfwSetFramebufferSizeCallback(window, (windowHandle, width, height) -> {
             glViewport(0, 0, width, height);
         });
-        
-        // Define vertices for the shape (with positions and colors)
-        float[] vertices = new float[] {
-        	    100, 100, 1f, 0f, 0f, // top left
-        	    200, 100, 0f, 1f, 0f, // top right
-        	    200, 200, 0f, 0f, 1f, // bottom right
 
-        	    100, 100, 1f, 0f, 0f, // top left
-        	    100, 200, 1f, 0f, 1f, // bottom left
-        	    200, 200, 0f, 0f, 1f  // bottom right
-        	};
-        float[] vertices2 = new float[] {
-        	    700, 100, 1f, 0f, 0f, // top left
-        	    200, 100, 0f, 1f, 0f, // top right
-        	    200, 200, 0f, 0f, 1f, // bottom right
 
-        	    700, 100, 1f, 0f, 0f, // top left
-        	    700, 200, 1f, 0f, 1f, // bottom left
-        	    200, 200, 0f, 0f, 1f  // bottom right
-        	};
-        testShape = new Shape(vertices, 100, 100);
-        testShape2 = new Shape(vertices2, 700, 100);
+        // Define vertices for the circle (using 6 vertices for a simple approximation)
+        int max = 300;
+        int min = 0;
+        int range = max - min + 1;
+        float[] circleVertices = new float[] {
+
+            300, 300, 1f, 0f, 0f, 
+            350, 300, 0f, 1f, 0f, 
+            350, 350, 0f, 0f, 1f, 
+
+            300, 300, 1f, 0f, 0f, 
+            300, 350, 1f, 0f, 1f, 
+            350, 350, 0f, 0f, 1f  
+        };
+
+
+
      // Zoom factor
         float[] zoomFactor = {1.0f};
 
@@ -77,8 +65,6 @@ public class Main {
         });
 
         // Apply zoom to projection matrix
-        int windowWidth = displayManager.getDim(window)[0];
-        int windowHeight = displayManager.getDim(window)[1];
         float aspectRatio = (float) windowWidth / windowHeight;
         float left= -100.0f * aspectRatio;
         float right = 100.0f * aspectRatio;
@@ -106,10 +92,6 @@ public class Main {
                 int[] height = new int[1];
                 glfwGetWindowSize(window, width, height);
                 
-                System.out.println(mouseX + ", " + mouseY);
-                if (testShape.isHovered(mouseX, mouseY)) {
-                    testShape.onClick();
-                }
             }
             else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
                 dragging[0] = false;
@@ -137,19 +119,60 @@ public class Main {
         int projectionMatrixLocation = glGetUniformLocation(shaderManager.getProgramID(), "projection");
 
         // Set uniform for the view matrix if applicable
-        // viewMatrix = ...; // Update based on camera position/rotation
         int viewMatrixLocation = glGetUniformLocation(shaderManager.getProgramID(), "view");
 
         // Main game loop
+        Scanner scanner = new Scanner(System.in); System.out.print("Enter URL: ");
+        String arg1 = scanner.nextLine(); // Reads the entire line
+    	String pythonScriptPath = System.getProperty("user.dir")+"\\web crawling\\main.py";
+        System.out.println(pythonScriptPath);
+        ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath, arg1);
+        Process p = pb.start();
+        p.waitFor();
+        ArrayList<Shape> nodes = new ArrayList<Shape>();
+        String csvFile = System.getProperty("user.dir")+"\\tmp.csv";
+        String line;
+        Shape node;
+        scanner.close();
+    	try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            while ((line = br.readLine()) != null) {
+                // Split the line by commas
+                String[] urls = line.split(",");
+                
+                // Print out each URL
+                for (String url : urls) {
+                	float randomX = (float)(Math.random() * range) + min;
+                	float randomY = (float)(Math.random() * range) + min;
+                    // Randomize the position (x and y coordinates) of each vertex
+                    float[] vertices = new float[circleVertices.length];
+                    System.arraycopy(circleVertices, 0, vertices, 0, circleVertices.length);
+                	Random random = new Random();
+                    for (int i = 0; i < circleVertices.length; i += 5) {
+                        // Apply a random factor to x and y (positions)
+                        float randomXOffset = random.nextFloat() * 3000 - 25; 
+                        float randomYOffset = random.nextFloat() * 3000 - 25; 
+
+                        vertices[i] = circleVertices[i] + randomXOffset;   // Update X position
+                        vertices[i+1] = circleVertices[i + 1] + randomYOffset; // Update Y position
+                    }
+                    node = new Shape(vertices, 1, url.trim()); // Use trim() to remove any extra spaces
+                    nodes.add(node);
+                    System.out.println(randomX + ", " + randomY);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (!displayManager.shouldClose()) {
+
         	displayManager.clearScreen();
             
             // Update the zoom factor dynamically
             windowWidth = displayManager.getDim(window)[0];
             windowHeight = displayManager.getDim(window)[1];
             aspectRatio = (float) windowWidth / windowHeight;
-            left = 0.0f;
-            right = windowWidth+300;   // 640
+            left = -300.0f;
+            right = 300.0f;   // 640
             bottom = -240.0f; // 480
             top = 240.0f;
             
@@ -167,12 +190,20 @@ public class Main {
             glUniformMatrix4fv(viewMatrixLocation, false, viewMatrix.get(new float[16]));
             
             // Render the shape
-            testShape.render();
-            testShape2.render();
+            //testShape.render(shaderManager.getProgramID());   // Render rectangle (text box)
+            for(Shape shape : nodes) {
+            	//
+            	
+            	
+            	shape.render(shaderManager.getProgramID());
+            }
+            //circleShape.render(shaderManager.getProgramID()); // Render circle
             // Update the display
             displayManager.updateDisplay();
             
         }
+        File file = new File(csvFile);
+        file.delete();
 
         displayManager.closeDisplay();  // Clean up when window is closed
         shaderManager.cleanup();        // Clean up shaders

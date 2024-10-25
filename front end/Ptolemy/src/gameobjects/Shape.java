@@ -8,13 +8,12 @@ public class Shape {
     private int vbo;
     private int vao;
     private float[] vertices;
-    private float positionX, positionY;
-
-    public Shape(float[] vertices, float posX, float posY) {
+    private int shapeType;
+    private String url;
+    public Shape(float[] vertices, int shapeType, String url) {
         this.vertices = vertices;
-        this.positionX = posX;
-        this.positionY = posY;
-
+        this.shapeType = shapeType;
+        this.url = url;
         vao = glGenVertexArrays();
         vbo = glGenBuffers();
 
@@ -39,18 +38,19 @@ public class Shape {
     public float[] getVertices() {
         return vertices;
     }
-
-    public float getPositionX() {
-        return positionX;
+    
+    public String getUrl() {
+    	return url;
     }
 
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public void render() {
+    public void render(int shaderProgramID) {
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 6);  // Render the triangles
+
+        // Send the shapeType uniform to the shader
+        int shapeTypeLocation = glGetUniformLocation(shaderProgramID, "shapeType");
+        glUniform1i(shapeTypeLocation, shapeType);  // Set shapeType in the shader
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);  // Render the shape
         glBindVertexArray(0);
     }
 

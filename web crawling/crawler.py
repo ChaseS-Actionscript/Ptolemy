@@ -15,11 +15,11 @@ class Crawler:
     def __init__(self, base_url):
         self.base_url = base_url
         self.visited = set()
-        self.edges: List[tuple] = []
+        self.urls: List[str] = []
         
     def crawl(self):
         self._visit(self.base_url)
-        return self.edges  
+        return self.urls  
 
     def _visit(self, url):
         if url not in self.visited and mimetypes.guess_type(url)[0] == mimetypes.guess_type("https://google.com")[0]:
@@ -33,7 +33,7 @@ class Crawler:
                 for link in links:
                     #full_url = self._make_full_url(link['href'])
                     full_url = self._make_full_url(link)
-                    self.edges.append((url, full_url))
+                    self.urls.append(full_url)
             except Exception as e:
                 print(f"Failed to visit {url}: {e}")
 
