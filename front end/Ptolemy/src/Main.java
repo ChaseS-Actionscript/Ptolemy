@@ -41,16 +41,23 @@ public class Main {
         int range = max - min + 1;
         float[] circleVertices = new float[] {
 
-            300, 300, 1f, 0f, 0f, 
-            350, 300, 0f, 1f, 0f, 
-            350, 350, 0f, 0f, 1f, 
+           /* top left */ 300, 300, 1f, 0f, 0f, 
+            /* bottom left */ 350, 300, 0f, 1f, 0f, 
+            /* top right */ 350, 350, 0f, 0f, 1f, 
 
             300, 300, 1f, 0f, 0f, 
             300, 350, 1f, 0f, 1f, 
             350, 350, 0f, 0f, 1f  
         };
-
-
+        
+        float[] vertices0x30 = new float[] {
+        		400, 400, 1f, 0f, 0f,
+        		450, 400, 0f, 1f, 0f,
+        		450, 450, 0f, 0f, 1f,
+        		400, 400, 1f, 0f, 0f,
+        		400, 450, 1f, 0f, 1f,
+        		450, 450, 0f, 0f, 1f
+        };
 
      // Zoom factor
         float[] zoomFactor = {1.0f};
@@ -87,7 +94,7 @@ public class Main {
                 glfwGetCursorPos(win, prevX, prevY);
                 double mouseX = prevX[0];
                 double mouseY = prevY[0];
-                
+                System.out.println(mouseX + ", " + mouseY);
                 int[] width = new int[1];
                 int[] height = new int[1];
                 glfwGetWindowSize(window, width, height);
@@ -191,13 +198,10 @@ public class Main {
             
             // Render the shape
             //testShape.render(shaderManager.getProgramID());   // Render rectangle (text box)
+            
             for(Shape shape : nodes) {
-            	//
-            	
-            	
             	shape.render(shaderManager.getProgramID());
             }
-            //circleShape.render(shaderManager.getProgramID()); // Render circle
             // Update the display
             displayManager.updateDisplay();
             

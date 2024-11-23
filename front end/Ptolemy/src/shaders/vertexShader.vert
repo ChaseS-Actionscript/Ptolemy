@@ -8,13 +8,19 @@ out vec2 fragPosition; // Position to pass to the fragment shader
 
 uniform mat4 projection;
 uniform mat4 view;
+uniform vec2 center;
 uniform int shapeType;  // 0 = rectangle, 1 = circle
 
 void main() {
     vertexColor = aColor;
-
-    // For rectangles, just pass the position as-is
-    fragPosition = position;
+    
+    if (shapeType == 1) {
+        // Calculate local position relative to the center of the circle (assuming it's centered at (325, 325))
+        fragPosition = (position - center) / vec2(50.0, 50.0);  // Normalize by radius
+    } else {
+        // For rectangles, just pass the position as-is
+        fragPosition = position;
+    }
 
     // Compute the final position in NDC space using projection and view matrices
     gl_Position = projection * view * vec4(position, 0.0, 1.0);

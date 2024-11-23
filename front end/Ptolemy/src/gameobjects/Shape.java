@@ -48,8 +48,9 @@ public class Shape {
 
         // Send the shapeType uniform to the shader
         int shapeTypeLocation = glGetUniformLocation(shaderProgramID, "shapeType");
+        int centerLocation = glGetUniformLocation(shaderProgramID, "center");
         glUniform1i(shapeTypeLocation, shapeType);  // Set shapeType in the shader
-
+        glUniform2f(centerLocation, (vertices[1] + vertices[11])/2, (vertices[0]+vertices[5])/2);
         glDrawArrays(GL_TRIANGLES, 0, 6);  // Render the shape
         glBindVertexArray(0);
     }
